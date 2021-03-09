@@ -1,4 +1,4 @@
-package gui_FX;
+package gui;
 
 import java.util.Random;
 

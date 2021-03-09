@@ -1,4 +1,4 @@
-package gui_FX;
+package gui;
 
 import javafx.animation.FadeTransition;
 import javafx.scene.image.Image;

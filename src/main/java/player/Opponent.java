@@ -10,16 +10,16 @@ public class Opponent extends Player{
 
 	private boolean fledFrom = false;
 	
-	public Opponent(int x, int y, int weaponType) {
-		super(x , y, weaponType);
+	public Opponent(int x, int y, PlayerType playerType) {
+		super(x , y, playerType);
 	}
 	
-	public Opponent(int x, int y, int weaponType, int lvl, Item item) {
-		super(x, y, weaponType, lvl, item);
+	public Opponent(int x, int y, PlayerType playerType, int lvl, Item item) {
+		super(x, y, playerType, lvl, item);
 	}
 	
-	public Opponent(int x, int y, int weaponType, int lvl, ArrayList<Item> items) {
-		super(x, y, weaponType, lvl, items);
+	public Opponent(int x, int y, PlayerType playerType, int lvl, ArrayList<Item> items) {
+		super(x, y, playerType, lvl, items);
 	}
 	
 	/**
@@ -60,29 +60,28 @@ public class Opponent extends Player{
 	 * <li><code>2</code> if shield
 	 * <li><code>3</code> if weapon + shield
 	 */
-	public int dropLoot() {
+	public ArrayList<Item> dropLoot() {
 		Random r = new Random();
 		int i = r.nextInt(100) + 1;
-		int check = 0;
-		if(i % 2 == 0) check += 1;
-		if(i % 3 == 0) check += 2;
-		
-		ArrayList<Item> loot = new ArrayList<Items>();
-		
-		if(check == 1) return 1;
-		else if(check == 2) {
-			if(inventory.equippedShield() != null) return 2;
-			else return 0;
+
+		boolean dropWeapon = i % 2 == 0;
+		boolean dropShield = i % 3 == 0;
+
+		ArrayList<Item> loot = new ArrayList<Item>();
+
+		if(dropWeapon && inventory.equippedWeapon() != null) {
+			loot.add(inventory.equippedWeapon());
 		}
-		else if(check == 3) {
-			if(inventory.equippedShield() != null) return 3;
-			else return 1;
+
+		if(dropShield && inventory.equippedShield() != null) {
+			loot.add(inventory.equippedShield());
 		}
-		else return 0;
+
+		return loot;
 	}
 	
 	public int exp() {
-		return lvl() * 10;
+		return level() * 10;
 	}
 	
 	/**

@@ -15,7 +15,7 @@ public class PhoenixBlade extends Skill{
 	}
 	
 	public int dmg() {
-		return user.dmg() + user.inv().equippedWeapon().dmg();
+		return user.dmg() + user.inventory().equippedWeapon().dmg();
 	}
 	
 	public String toString() {
@@ -23,7 +23,7 @@ public class PhoenixBlade extends Skill{
 	}
 	
 	public String description() {
-		return "You invoke the power of the Phoenix doubling your weapon dmg for the next strike. Deals " + user.inv().equippedWeapon().dmg() + " additional damage.";
+		return "You invoke the power of the Phoenix doubling your weapon dmg for the next strike. Deals " + user.inventory().equippedWeapon().dmg() + " additional damage.";
 	}
 	
 	

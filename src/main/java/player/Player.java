@@ -47,7 +47,7 @@ public class Player {
 	
 	public Player(int x, int y, PlayerType playerType, int lvl, Item item) {
 		this(x, y, playerType);
-		for(int i = lvl(); i <= lvl; i++) levelUp();
+		for(int i = level(); i <= lvl; i++) levelUp();
 		if(item instanceof Weapon) { inventory.equipWeapon( (Weapon) item ); }
 		else if (item instanceof Shield) { inventory.equipShield( (Shield) item ); }
 	}
@@ -55,7 +55,7 @@ public class Player {
 	public Player(int x, int y, PlayerType playerType, int lvl, ArrayList<Item> equipment) {
 		this(x, y, playerType);
 		
-		for(int i = lvl(); i <= lvl; i++) levelUp();
+		for(int i = level(); i <= lvl; i++) levelUp();
 		//add all the items into inventory / equipment
 		for(int i = 0; i < equipment.size(); i++) {
 			if(equipment.get(i) instanceof Weapon) {
@@ -81,11 +81,11 @@ public class Player {
 		return stats;
 	}
 	
-	public int lvl() {
+	public int level() {
 		return Level;
 	}
 	
-	public Inventory inv() {
+	public Inventory inventory() {
 		return inventory;
 	}
 	
@@ -134,6 +134,14 @@ public class Player {
 		int def = 0;
 		if(inventory.equippedShield() != null) def += inventory.equippedShield().def();
 		return def;
+	}
+
+	public int exp() {
+		return EXP;
+	}
+
+	public int expToLevelUp() {
+		return expToLvlUp;
 	}
 	
 	public void loseHP(int x) {

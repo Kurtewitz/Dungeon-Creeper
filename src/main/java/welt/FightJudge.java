@@ -4,11 +4,10 @@ import java.util.Random;
 
 import items.Item;
 import items.Shield;
-import items.weapons.Dagger;
-import items.weapons.Mace;
-import items.weapons.Sword;
+import items.weapons.*;
 import player.Opponent;
 import player.Player;
+import player.PlayerType;
 
 /**
  * This class handles monster spawns and the fighting in the game.
@@ -46,16 +45,21 @@ public class FightJudge {
 	 * @return an opponent
 	 */
 	public Opponent spawnMonster(int x, int y) {
+
 		int weaponType = 1 + r.nextInt(3);
-		int lvl = p.lvl()-1 + r.nextInt(3);
-		if(p.lvl() < 3) lvl = p.lvl();
+
+		PlayerType opponentClass = PlayerType.values()[weaponType - 1];
+
+
+		int lvl = p.level()-1 + r.nextInt(3);
+		if(p.level() < 3) lvl = p.level();
 		
 		int weaponDmg = 1 + r.nextInt(lvl);
 		boolean zh = r.nextBoolean();
 		
-		if(zh && weaponType != 2) weaponDmg *= 2;
+		if(zh && weaponType != 3) weaponDmg *= 2;
 		// daggers always two handed
-		if(weaponType == 2) zh = true;
+		if(weaponType == 3) zh = true;
 		
 		ArrayList<Item> items = new ArrayList<Item>();
 		if(weaponType == 1) items.add(new Mace(weaponDmg, zh));
@@ -72,7 +76,7 @@ public class FightJudge {
 			}
 		}
 		
-		return new Opponent(x, y, weaponType, lvl, items);
+		return new Opponent(x, y, opponentClass, lvl, items);
 	}
 	
 	/**
@@ -93,18 +97,18 @@ public class FightJudge {
 		Random r = new Random();
 		int i = r.nextInt(50) + 1;
 		
-		if(p.inv().countWeapons() > 0) {
+		if(p.inventory().countWeapons() > 0) {
 			if(i <= 10) {
-				int a = r.nextInt(p.inv().countWeapons());
-				p.inv().removeWeapon(a);
+				int a = r.nextInt(p.inventory().countWeapons());
+				p.inventory().removeWeapon(a);
 				message += " You notice, that you lost one of your weapons.";
 			}	
 		}
 
-		if(p.inv().countShields() > 0) {
+		if(p.inventory().countShields() > 0) {
 			if(i % 10 == 0) {
-				int a = r.nextInt(p.inv().countShields());
-				p.inv().removeShield(a);
+				int a = r.nextInt(p.inventory().countShields());
+				p.inventory().removeShield(a);
 				message += " You notice, that you lost one of your shields.";
 			}
 		}
@@ -136,7 +140,7 @@ public class FightJudge {
 		if (s == null || s.length() == 0) c = ' ';
 		else c = s.charAt(0);
 		
-		if(c == 'y') {p.inv().pickUpWeapon(o.inv().equippedWeapon()); return true;}
+		if(c == 'y') {p.inventory().pickUpWeapon(o.inventory().equippedWeapon()); return true;}
 		if(c == 'n') {return false;}
 		else return askPickUpWeapon();
 		
@@ -152,7 +156,7 @@ public class FightJudge {
 		if (s == null || s.length() == 0) c = ' ';
 		else c = s.charAt(0);
 		
-		if(c == 'y') {p.inv().pickUpShield(o.inv().equippedShield()); return true;}
+		if(c == 'y') {p.inventory().pickUpShield(o.inventory().equippedShield()); return true;}
 		if(c == 'n') {return false;}
 		else return askPickUpShield();
 		
@@ -163,35 +167,27 @@ public class FightJudge {
 	 */
 	public String loot() {
 		String message = "Picked up ";
-		int i = o.dropLoot();
-		switch(i) {
-			case 0:
-				message = "You searched the battlefield, but found no spoils ";
-				break;
-			case 1:
-				if(askPickUpWeapon()) {
-					message += o.dropWeapon();
-				}
-				break;
-			case 2:
-				if(askPickUpShield()) {
-					message += o.dropShield();
-				}
-				break;
-			case 3:
-				boolean pickedUpWeapon = false;
-				if(askPickUpWeapon()) {
-					pickedUpWeapon = true;
-					message += o.dropWeapon();
-				}
-				if(askPickUpShield()) {
-					if(pickedUpWeapon) message += " and ";
-					message += o.dropShield();
-				}
-				break;
-		
+		ArrayList<Item> loot = o.dropLoot();
+
+		if(loot.isEmpty()) {
+			message = "You searched the battlefield, but found no spoils ";
 		}
-		
+		for(Item drop : loot) {
+
+			if (drop instanceof Weapon) {
+				if (askPickUpWeapon()) {
+					message += o.dropWeapon();
+				}
+			}
+
+			if (drop instanceof Shield) {
+				if (askPickUpShield()) {
+					message += o.dropShield();
+				}
+			}
+		}
+
+
 		if(message.equals("Picked up ")) message = "";
 		
 		System.out.println(message);

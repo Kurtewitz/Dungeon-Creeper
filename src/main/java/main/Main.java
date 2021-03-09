@@ -1,6 +1,6 @@
 package main;
 
-import gui_FX.View;
+import gui.View;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import welt.Model;
