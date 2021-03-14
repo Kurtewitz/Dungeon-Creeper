@@ -38,7 +38,9 @@ public class SideMenu extends VBox {
 
         Label equippedWeapon = new Label("Weapon: " + brokenUpWeaponText);
         Label equippedShield = new Label("Shield: " + brokenUpShieldText);
-        Label potions = new Label("HP Potions: " + this.inventory.getPotions());
+
+        Label potions = new Label("HP Potions: " + this.inventory.getHealthPotions().getValue());
+        potions.textProperty().bind(this.inventory.getHealthPotions().asString("Health Potions:\n%s"));
 
 
         equippedWeapon.setPrefSize(width, height / 3);

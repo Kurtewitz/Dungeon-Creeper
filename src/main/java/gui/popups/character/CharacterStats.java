@@ -13,7 +13,6 @@ import javafx.scene.paint.Paint;
 import player.Player;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class CharacterStats extends VBox {
 
@@ -47,23 +46,23 @@ public class CharacterStats extends VBox {
 //        setPrefWrapLength(width);
 
         //create starter stats
+        characterStatLabels = new HashMap<>();
 
-        characterStatLabels = new HashMap();
-
-        
         characterStatLabels.put("Level", new CharacterStat("Level", this.player.level()));
+        characterStatLabels.put("Health Points", new CharacterStat("Current Health", this.player.getCurrentHealth()));
         characterStatLabels.put("Experience", new CharacterStat("Experience to level up",
                 this.player.expToLevelUp() - this.player.exp()));
-        characterStatLabels.put("Health", new CharacterStat("Health", this.player.stats().Health()));
-        characterStatLabels.put("Strength", new CharacterStat("Strength", this.player.stats().Str()));
-        characterStatLabels.put("Dexterity", new CharacterStat("Dexterity", this.player.stats().Dex()));
-        characterStatLabels.put("Intelligence", new CharacterStat("Intelligence", this.player.stats().Int()));
-        characterStatLabels.put("Wisdom", new CharacterStat("Wisdom", this.player.stats().Wis()));
-        characterStatLabels.put("Speed", new CharacterStat("Speed", this.player.stats().Spd()));
+        characterStatLabels.put("Health", new CharacterStat("Health", this.player.stats().health()));
+        characterStatLabels.put("Strength", new CharacterStat("Strength", this.player.stats().strength()));
+        characterStatLabels.put("Dexterity", new CharacterStat("Dexterity", this.player.stats().dexterity()));
+        characterStatLabels.put("Intelligence", new CharacterStat("Intelligence", this.player.stats().intelligence()));
+        characterStatLabels.put("Wisdom", new CharacterStat("Wisdom", this.player.stats().wisdom()));
+        characterStatLabels.put("Speed", new CharacterStat("Speed", this.player.stats().speed()));
 
 
         this.getChildren().addAll(
                 characterStatLabels.get("Level"),
+                characterStatLabels.get("Health Points"),
                 characterStatLabels.get("Experience"),
                 characterStatLabels.get("Health"),
                 characterStatLabels.get("Strength"),
@@ -71,10 +70,9 @@ public class CharacterStats extends VBox {
                 characterStatLabels.get("Intelligence"),
                 characterStatLabels.get("Wisdom"),
                 characterStatLabels.get("Speed")
-                
         );
 
-        // and will it with your current stats
+        // and fill it with your current stats
         update();
     }
 
@@ -108,12 +106,13 @@ public class CharacterStats extends VBox {
     public void update() {
 
         characterStatLabels.get("Level").setStatValue(this.player.level());
+        characterStatLabels.get("Health Points").setStatValue(this.player.getCurrentHealth());
         characterStatLabels.get("Experience").setStatValue(this.player.expToLevelUp() - this.player.exp());
-        characterStatLabels.get("Health").setStatValue(this.player.stats().Health());
-        characterStatLabels.get("Strength").setStatValue(this.player.stats().Str());
-        characterStatLabels.get("Dexterity").setStatValue(this.player.stats().Dex());
-        characterStatLabels.get("Intelligence").setStatValue(this.player.stats().Int());
-        characterStatLabels.get("Wisdom").setStatValue(this.player.stats().Wis());
-        characterStatLabels.get("Speed").setStatValue(this.player.stats().Spd());
+        characterStatLabels.get("Health").setStatValue(this.player.stats().health());
+        characterStatLabels.get("Strength").setStatValue(this.player.stats().strength());
+        characterStatLabels.get("Dexterity").setStatValue(this.player.stats().dexterity());
+        characterStatLabels.get("Intelligence").setStatValue(this.player.stats().intelligence());
+        characterStatLabels.get("Wisdom").setStatValue(this.player.stats().wisdom());
+        characterStatLabels.get("Speed").setStatValue(this.player.stats().speed());
     }
 }

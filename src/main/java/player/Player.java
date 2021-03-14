@@ -1,17 +1,24 @@
 package player;
-import java.util.ArrayList;
 
-import items.*;
+import items.Item;
+import items.shields.Shield;
 import items.weapons.Mace;
 import items.weapons.Sword;
 import items.weapons.Weapon;
+import player.stats.Stats;
+import player.stats.StatsMage;
+import player.stats.StatsThief;
+import player.stats.StatsWarrior;
+
+import java.util.ArrayList;
+
 
 public class Player {
 	int Level;
 	int manaPointsCurrent;
 	int manaPointsMax;
 	int healthPointsCurrent;
-	int healthPointsMax;
+	private int healthPointsMax;
 	int EXP;
 	int expToLvlUp;
 	Inventory inventory;
@@ -39,9 +46,9 @@ public class Player {
 		
 		skills = new Skills(this);
 		
-		manaPointsMax = 10 * stats.Int();
+		manaPointsMax = 10 * stats.intelligence();
 		manaPointsCurrent = manaPointsMax;
-		healthPointsMax = 10 * stats.Health();
+		healthPointsMax = 10 * stats.health();
 		healthPointsCurrent = healthPointsMax;
 	}
 	
@@ -104,16 +111,8 @@ public class Player {
 		this.y = y;
 	}
 	
-	public int HP() {
-		return healthPointsCurrent;
-	}
-	
-	public int maxHP() {
-		return healthPointsMax;
-	}
-	
 	public void useHpPotion() {
-		if(inventory.usePotion()) healthPointsCurrent += 80;
+		if(inventory.useHealthPotion()) healthPointsCurrent += 80;
 		if(healthPointsCurrent > healthPointsMax) healthPointsCurrent = healthPointsMax;
 	}
 	
@@ -122,17 +121,17 @@ public class Player {
 		// make sure the final dmg is at least 1.
 		int dmgDealt = Math.max(1, dmg() - p.def());
 		p.loseHP(dmgDealt);
-		System.out.println("Gegner HP: " + p.HP() + " / " + p.healthPointsMax);
+		System.out.println("Gegner HP: " + p.getCurrentHealth() + " / " + p.getMaxHealth());
 	}
 	public int dmg() {
-		if(inventory.equippedWeapon() instanceof Sword) { return stats().Str() + inventory.equippedWeapon().dmg();}
-		else if(inventory.equippedWeapon() instanceof Mace) {return stats().Str() + inventory.equippedWeapon().dmg();}
-		else return stats.Str() / 5 + stats().Dex() / 3 + inventory.equippedWeapon().dmg();
+		if(inventory.equippedWeapon() instanceof Sword) { return stats().strength() + inventory.equippedWeapon().damage();}
+		else if(inventory.equippedWeapon() instanceof Mace) {return stats().strength() + inventory.equippedWeapon().damage();}
+		else return stats.strength() / 5 + stats().dexterity() / 3 + inventory.equippedWeapon().damage();
 	}
 	
 	public int def() {
 		int def = 0;
-		if(inventory.equippedShield() != null) def += inventory.equippedShield().def();
+		if(inventory.equippedShield() != null) def += inventory.equippedShield().defense();
 		return def;
 	}
 
@@ -145,10 +144,8 @@ public class Player {
 	}
 	
 	public void loseHP(int x) {
-		if(x > HP()) {
-			healthPointsCurrent = 0;}
-		else {
-			healthPointsCurrent -= x;}
+		healthPointsCurrent -= x;
+		healthPointsCurrent = Math.max(0, healthPointsCurrent);
 	}
 	
 	public void gainExp(int exp) {
@@ -164,11 +161,24 @@ public class Player {
 		Level++;
 		expToLvlUp = 100 * (int) Math.pow(2, Level - 1);
 		stats().levelUp();
-		manaPointsMax = 10 * stats.Int();
+		manaPointsMax = 10 * stats.intelligence();
 		manaPointsCurrent = manaPointsMax;
-		healthPointsMax = 10 * stats.Health();
+		healthPointsMax = 10 * stats.health();
 		healthPointsCurrent = healthPointsMax;
 	}
+
+	public int getCurrentHealth() {
+		return healthPointsCurrent;
+	}
+
+	public int getMaxHealth() {
+		return healthPointsMax;
+	}
+
+	public boolean isDead() {
+		return healthPointsCurrent <= 0;
+	}
+
 	
 /*	public static void main(String[] args) {
 		Player p = new Player(5,5,1);

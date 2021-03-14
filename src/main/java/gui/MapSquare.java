@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+import util.RNG;
 
 public class MapSquare extends StackPane {
 
@@ -169,7 +170,7 @@ public class MapSquare extends StackPane {
 		if(monsterSpawned) return true;
 		
 		//but else... roll the dice
-		int d100 = View.rnd.nextInt(100);
+		int d100 = RNG.randomInt(100);
 		if(d100 < WorldScene.MONSTER_SPAWN_CHANCE) {
 			monsterSpawned = true;
 			return true;
@@ -209,7 +210,7 @@ public class MapSquare extends StackPane {
 		
 		if(possibleTreasure) {
 			//roll the dice
-			int d100 = View.rnd.nextInt(100);
+			int d100 = RNG.randomInt(100);
 			if(d100 < WorldScene.TREASURE_SPAWN_CHANCE) {
 				treasureSpawned = true;
 				return true;

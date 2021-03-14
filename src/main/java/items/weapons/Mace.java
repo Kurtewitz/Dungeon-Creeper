@@ -10,10 +10,10 @@ public class Mace extends Weapon {
     public String toString() {
         String namePattern = "%1$s, %2$d %3$s damage";
 
-        String name = twoHanded() ? "War hammer (2-handed)" : "Mace";
+        String name = twoHanded() ? "War hammer" : "Mace";
         String dmgType = "blunt";
 
-        return String.format(namePattern, name, dmg(), dmgType);
+        return String.format(namePattern, name, damage(), dmgType);
 
     }
 }

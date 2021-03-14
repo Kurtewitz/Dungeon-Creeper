@@ -2,42 +2,32 @@ package items.weapons;
 
 import items.Equippable;
 import items.Item;
-import player.Stats;
+import player.stats.Stats;
 
-public abstract class Weapon extends Item implements Equippable/*implements Comparable<Weapon> */{
+public abstract class Weapon extends Item implements Equippable {
 
 	/** Weapon class: <li>1 = Mace <li>2 = Sword<li>3 = Dagger */
 	private final WeaponType weaponType;
 	/** Damage dealt by the weapon*/
-	private final int dmg;
+	private final int damage;
 	/** is the weapon two handed */
 	private final boolean twoHanded;
 
-	public Weapon(int dmg, WeaponType weaponType, boolean twoHanded) {
+	protected Weapon(int damage, WeaponType weaponType, boolean twoHanded) {
 		super(0);
-		this.dmg = Math.max(1, dmg); // min 1 dmg
+		this.damage = Math.max(1, damage); // min 1 dmg
 		this.weaponType = weaponType;
 		this.twoHanded = twoHanded;
 
-		int value = dmg;
+		int value = damage;
 		if(twoHanded) value /= 2;
 //		if(prefix || suffix) value += additional value of upgrade;
 		setValue(value);
 
 	}
 
-//	public int compareTo(Weapon w) {
-//		if(Typ > w.Typ) return 1;
-//		else if(Typ < w.Typ) return -1;
-//		else {
-//			if(twoHanded() && !w.twoHanded()) return 1;
-//			else if(!twoHanded() && w.twoHanded()) return -1;
-//			else return DMG - w.DMG;
-//		}
-//	}
-
-	public int dmg() {
-		return dmg;
+	public int damage() {
+		return damage;
 	}
 
 	public boolean twoHanded() {

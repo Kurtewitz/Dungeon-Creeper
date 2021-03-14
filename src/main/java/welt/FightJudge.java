@@ -3,11 +3,14 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import items.Item;
-import items.Shield;
+import items.shields.Shield;
 import items.weapons.*;
 import player.Opponent;
 import player.Player;
 import player.PlayerType;
+import util.RNG;
+
+import static items.weapons.WeaponType.*;
 
 /**
  * This class handles monster spawns and the fighting in the game.
@@ -16,28 +19,17 @@ import player.PlayerType;
  */
 public class FightJudge {
 
-	Player p;
-	Opponent o;
+	Player player;
+	Opponent opponent;
 	/**  the distance between the player and the enemy */
 	int distance;
-	Random r = new Random();
 	
-	public FightJudge(Player p) {
-		this.p = p;
+	public FightJudge(Player player) {
+		this.player = player;
 	}
 	
 	public Opponent opponent() {
-		return o;
-	}
-	
-	/**
-	 * checks for monsters. 30% chance for an encounter.
-	 * @return <code>true</code> if you encountered a monster <br><code>false</code> if there is no monster
-	 */
-	public boolean checkForMonster() {
-		
-		if(r.nextInt(10) % 4 == 0) return true;
-		return false;
+		return opponent;
 	}
 	
 	/**
@@ -46,37 +38,39 @@ public class FightJudge {
 	 */
 	public Opponent spawnMonster(int x, int y) {
 
-		int weaponType = 1 + r.nextInt(3);
+		PlayerType opponentType = PlayerType.getRandom();
+		WeaponType weaponType = WeaponType.getRandomForClass(opponentType);
 
-		PlayerType opponentClass = PlayerType.values()[weaponType - 1];
+		//opponent level can be between playerLvl-1 and playerLvl+1 for players of level > 3
+		int opponentLevel = player.level() <= 3
+				? player.level()
+				: RNG.randomIntegerBetween(player.level() - 1, player.level() + 2);
+
+		int weaponDmg = 1 + RNG.randomPositiveInt(opponentLevel);
+		boolean twoHanded = RNG.randomBoolean();
 
 
-		int lvl = p.level()-1 + r.nextInt(3);
-		if(p.level() < 3) lvl = p.level();
-		
-		int weaponDmg = 1 + r.nextInt(lvl);
-		boolean zh = r.nextBoolean();
-		
-		if(zh && weaponType != 3) weaponDmg *= 2;
+		if(twoHanded && !weaponType.equals(Dagger)) weaponDmg *= 2;
 		// daggers always two handed
-		if(weaponType == 3) zh = true;
+		if(weaponType.equals(Dagger)) twoHanded = true;
 		
-		ArrayList<Item> items = new ArrayList<Item>();
-		if(weaponType == 1) items.add(new Mace(weaponDmg, zh));
-		else if (weaponType == 2) items.add(new Sword(weaponDmg, zh));
-		else if (weaponType == 3) items.add(new Dagger(weaponDmg));
+		ArrayList<Item> items = new ArrayList<>();
+		if(Mace.equals(weaponType)) items.add(new Mace(weaponDmg, twoHanded));
+		else if (Sword.equals(weaponType)) items.add(new Sword(weaponDmg, twoHanded));
+		else if (Dagger.equals(weaponType)) items.add(new Dagger(weaponDmg));
 		
 		// if second hand free, maybe a shield
-		if(!zh) {
-			int rnd = r.nextInt(100);
-			if(rnd < 40) {
-				// p.lvl + 1 to avoid problems at lvl 1. (1 / 2 = 0, bound must be positive)
-				int def = r.nextInt(( lvl+1 ) / 2);
+		if(!twoHanded) {
+			//40% chance the opponent with single handed weapon will have a shield
+			boolean hasShield = RNG.randomInt(100) < 40;
+			if(hasShield) {
+
+				int def = RNG.randomPositiveInt(opponentLevel / 2);
 				items.add(new Shield(def));
 			}
 		}
 		
-		return new Opponent(x, y, opponentClass, lvl, items);
+		return new Opponent(x, y, opponentType, opponentLevel, items);
 	}
 	
 	/**
@@ -84,7 +78,7 @@ public class FightJudge {
 	 * @param o the monster you'll be fighting
 	 */
 	public void initFight(Opponent o) {
-		this.o = o;
+		this.opponent = o;
 	}
 	
 	/**
@@ -97,18 +91,18 @@ public class FightJudge {
 		Random r = new Random();
 		int i = r.nextInt(50) + 1;
 		
-		if(p.inventory().countWeapons() > 0) {
+		if(player.inventory().countWeapons() > 0) {
 			if(i <= 10) {
-				int a = r.nextInt(p.inventory().countWeapons());
-				p.inventory().removeWeapon(a);
+				int a = r.nextInt(player.inventory().countWeapons());
+				player.inventory().removeWeapon(a);
 				message += " You notice, that you lost one of your weapons.";
 			}	
 		}
 
-		if(p.inventory().countShields() > 0) {
+		if(player.inventory().countShields() > 0) {
 			if(i % 10 == 0) {
-				int a = r.nextInt(p.inventory().countShields());
-				p.inventory().removeShield(a);
+				int a = r.nextInt(player.inventory().countShields());
+				player.inventory().removeShield(a);
 				message += " You notice, that you lost one of your shields.";
 			}
 		}
@@ -135,12 +129,13 @@ public class FightJudge {
 	 * @return
 	 */
 	public boolean askPickUpWeapon() {
-		String s = javax.swing.JOptionPane.showInputDialog(null,"Pick up " + o.dropWeapon() + " ?\n\ny = yes, n = no");
+		String s = javax.swing.JOptionPane.showInputDialog(null,"Pick up " + opponent.dropWeapon() + " ?\n\ny = yes, n = no");
 		char c;
 		if (s == null || s.length() == 0) c = ' ';
 		else c = s.charAt(0);
 		
-		if(c == 'y') {p.inventory().pickUpWeapon(o.inventory().equippedWeapon()); return true;}
+		if(c == 'y') {
+			player.inventory().pickUpWeapon(opponent.inventory().equippedWeapon()); return true;}
 		if(c == 'n') {return false;}
 		else return askPickUpWeapon();
 		
@@ -151,12 +146,13 @@ public class FightJudge {
 	 * @return
 	 */
 	public boolean askPickUpShield() {
-		String s = javax.swing.JOptionPane.showInputDialog(null,"Pick up " + o.dropShield() + " ?\n\ny = yes, n = no");
+		String s = javax.swing.JOptionPane.showInputDialog(null,"Pick up " + opponent.dropShield() + " ?\n\ny = yes, n = no");
 		char c;
 		if (s == null || s.length() == 0) c = ' ';
 		else c = s.charAt(0);
 		
-		if(c == 'y') {p.inventory().pickUpShield(o.inventory().equippedShield()); return true;}
+		if(c == 'y') {
+			player.inventory().pickUpShield(opponent.inventory().equippedShield()); return true;}
 		if(c == 'n') {return false;}
 		else return askPickUpShield();
 		
@@ -167,7 +163,7 @@ public class FightJudge {
 	 */
 	public String loot() {
 		String message = "Picked up ";
-		ArrayList<Item> loot = o.dropLoot();
+		ArrayList<Item> loot = opponent.dropLoot();
 
 		if(loot.isEmpty()) {
 			message = "You searched the battlefield, but found no spoils ";
@@ -176,13 +172,13 @@ public class FightJudge {
 
 			if (drop instanceof Weapon) {
 				if (askPickUpWeapon()) {
-					message += o.dropWeapon();
+					message += opponent.dropWeapon();
 				}
 			}
 
 			if (drop instanceof Shield) {
 				if (askPickUpShield()) {
-					message += o.dropShield();
+					message += opponent.dropShield();
 				}
 			}
 		}
@@ -199,9 +195,9 @@ public class FightJudge {
 	 * @return String representing the outcome of the looting
 	 */
 	public String killOpponent() {
-		opponent().loseHP(opponent().maxHP());
+		opponent().loseHP(opponent().getMaxHealth());
 		
-		p.gainExp(o.exp());
+		player.gainExp(opponent.exp());
 		
 		return loot();
 		
@@ -218,9 +214,10 @@ public class FightJudge {
 		if (s == null || s.length() == 0) c= ' ';
 		else c = s.charAt(0);
 
-		if(c == 'q') {attack(p, o);return true;}
-		if(c == 'e') {flee(o);return false;}
-		if(c == 'p') {p.useHpPotion(); return true;}
+		if(c == 'q') {attack(player, opponent);return true;}
+		if(c == 'e') {flee(opponent);return false;}
+		if(c == 'p') {
+			player.useHpPotion(); return true;}
 		else return actFight();
 	}
 	

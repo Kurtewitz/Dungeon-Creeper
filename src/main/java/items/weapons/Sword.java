@@ -13,6 +13,6 @@ public class Sword extends Weapon{
 		String name = twoHanded() ? "Zweihänder" : "Sword";
 		String dmgType = "slashing";
 
-		return String.format(namePattern, name, dmg(), dmgType);
+		return String.format(namePattern, name, damage(), dmgType);
 	}
 }

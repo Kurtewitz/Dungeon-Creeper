@@ -14,7 +14,7 @@ public class Dagger extends Weapon {
         String name = twoHanded() ? "Daggers" : "Dagger";
         String dmgType = "piercing";
 
-        return String.format(namePattern, name, dmg(), dmgType);
+        return String.format(namePattern, name, damage(), dmgType);
 
     }
 }

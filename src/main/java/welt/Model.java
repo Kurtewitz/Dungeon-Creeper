@@ -1,14 +1,12 @@
 package welt;
 
 import items.weapons.Sword;
-import player.Opponent;
 import player.Player;
 import player.PlayerType;
 
 public class Model {
 
     Player p;
-    Opponent o;
     FightJudge fj;
 
     public Model() {
@@ -22,10 +20,6 @@ public class Model {
 
     public Player player() {
         return p;
-    }
-
-    public Opponent opponent() {
-        return o;
     }
 
 }

@@ -445,7 +445,7 @@ public class WorldScene extends Scene {
 			uncoverHerosSurrounding();
 			
 			if(encounteredMonster(squares[y][x])) {
-				
+				model.fightJudge().initFight(model.fightJudge().spawnMonster(x, y));
 				view.switchToFight(startingX, startingY);
 			}
 		}
@@ -502,6 +502,7 @@ public class WorldScene extends Scene {
 				case RIGHT: if(animationFinished) moveHeroTo(model.player().x() + 1, model.player().y()); break;//moveEast(); break;
 				case I: if(!inventory.showing()) inventory.show(); else inventory.hide(); break;
 				case C: if(!stats.showing()) stats.show(); else stats.hide(); break;
+				case P: model.player().useHpPotion(); break;
 				default: break;
 			}
 			}

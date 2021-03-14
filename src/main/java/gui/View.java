@@ -16,16 +16,7 @@ public class View extends Stage {
 	private FightScene fight;
 	
 	Model model;
-	
-	/** roll the dice */
-	public static final Random rnd = new Random();
-	
-	
-	
-	
-	
-	
-	
+
 	public View(Model model) {
 		super();
 		

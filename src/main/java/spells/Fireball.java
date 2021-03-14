@@ -8,7 +8,7 @@ public class Fireball extends DamageSpell {
 		}
 		
 		public int dmg() {
-			return p.stats().Wis() * 10;
+			return p.stats().wisdom() * 10;
 		}
 		
 		public String toString() {

@@ -1,7 +1,7 @@
 package gui.popups.inventory;
 
 import items.Item;
-import items.Shield;
+import items.shields.Shield;
 import items.weapons.Dagger;
 import items.weapons.Mace;
 import items.weapons.Sword;
@@ -56,7 +56,7 @@ public class InventoryItem extends Label {
             setBackground(weaponBG);
 
             Weapon w = (Weapon) item;
-            String text = w.dmg() + "\n ";
+            String text = w.damage() + "\n ";
             if(w instanceof Sword) text += "slash";
             else if (w instanceof Mace) text += "blunt";
             else if (w instanceof Dagger) text += "pierce";
@@ -67,7 +67,7 @@ public class InventoryItem extends Label {
             setBackground(shieldBG);
 
             Shield s = (Shield) item;
-            String text = s.def() + "\n def";
+            String text = s.defense() + "\n def";
 
             setText(text);
         }
@@ -87,7 +87,7 @@ public class InventoryItem extends Label {
             setBackground(weaponBG);
 
             Weapon w = (Weapon) item;
-            String text = w.dmg() + "\n ";
+            String text = w.damage() + "\n ";
             if(w instanceof Sword) text += "slash";
             else if (w instanceof Mace) text += "blunt";
             else if (w instanceof Dagger) text += "pierce";
@@ -98,7 +98,7 @@ public class InventoryItem extends Label {
             setBackground(shieldBG);
 
             Shield s = (Shield) item;
-            String text = s.def() + "\n def";
+            String text = s.defense() + "\n def";
 
             setText(text);
         }

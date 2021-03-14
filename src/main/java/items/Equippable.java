@@ -1,10 +1,9 @@
 package items;
 
-import player.Stats;
+import player.stats.Stats;
 
 public interface Equippable {
+	
+	void influenceStats(Stats stats);
 
-	
-	public abstract void influenceStats(Stats stats);
-	
 }

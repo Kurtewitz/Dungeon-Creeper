@@ -1,11 +1,15 @@
 package player;
-import java.util.*;
 
-import items.*;
+import items.Item;
+import items.shields.Shield;
 import items.weapons.Dagger;
 import items.weapons.Mace;
 import items.weapons.Sword;
 import items.weapons.Weapon;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
+import java.util.ArrayList;
 
 public class Inventory {
 	
@@ -14,13 +18,13 @@ public class Inventory {
 	ArrayList<Weapon> weapons;
 	ArrayList<Shield> shields;
 	Equipment equipped;
-	int HPPotion;
+	IntegerProperty healthPotions;
 	
 	public Inventory() {
-		weapons = new ArrayList<Weapon>();
-		shields = new ArrayList<Shield>();
+		weapons = new ArrayList<>();
+		shields = new ArrayList<>();
 		equipped = new Equipment();
-		HPPotion = 5;
+		healthPotions = new SimpleIntegerProperty(this, "healthPotions", 5);
 	}
 	
 	public Inventory(Weapon w) {
@@ -42,13 +46,13 @@ public class Inventory {
 		equipShield(s);
 	}
 	
-	public int getPotions() {
-		return HPPotion;
+	public IntegerProperty getHealthPotions() {
+		return healthPotions;
 	}
 	
-	public boolean usePotion() {
-		if(HPPotion > 0) {
-			HPPotion--;
+	public boolean useHealthPotion() {
+		if(healthPotions.get() > 0) {
+			healthPotions.set(healthPotions.get() - 1);
 			return true;
 		}
 		return false;
@@ -113,11 +117,6 @@ public class Inventory {
 		if(addWeapon(w)) message += "Picked up" + w;
 		else message += "Backpack full";
 		return message;
-		
-//		while(!addWeapon(w)) {
-//			Weapon ta = weapons.remove(0);
-//			System.out.println("Backpack full. Threw away " + ta );
-//		}
 	}
 	
 	/**
@@ -145,11 +144,6 @@ public class Inventory {
 		if(addShield(s)) message += "Picked up" + s;
 		else message += "Backpack full";
 		return message;
-		
-//		while(!addShield(s)) {
-//			Shield ta = shields.remove(0);
-//			System.out.println("Backpack full. Threw away " + ta);
-//		}
 	}
 	
 	/**
@@ -203,7 +197,6 @@ public class Inventory {
 			else {
 				// try to add and equip weapon
 				if(addWeapon(w)) equipWeapon(w);
-				
 			}
 		}
 	}
@@ -227,7 +220,6 @@ public class Inventory {
 				if(addShield(s)) equipShield(s);
 			}
 		}
-		
 	}
 	
 	public void printWeapons() {

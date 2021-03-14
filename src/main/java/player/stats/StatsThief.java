@@ -1,32 +1,33 @@
-package player;
+package player.stats;
 
-public class StatsMage extends Stats{
-	public StatsMage() {
-		super(2, 8, 4, 4, 8, 2);
+public class StatsThief extends Stats{
+	public StatsThief() {
+		super(4,3,7,5,2,7);
 	}
 	
 	/**
 	 * Einen zufaellig gewaehlten Stat erhoehen. Wahrscheinlichkeiten fuer Stats:
-	 * <li> Str und Dex -> 5%
-	 * <li> Int und Wis -> 30%
-	 * <li> Spd und Health -> 15%
+	 * <li> Str und Health -> 15%
+	 * <li> Int und Wis -> 5%
+	 * <li> Spd und Dex -> 30%
 	 */
 	public void levelUp1Stat(){
 		java.util.Random r = new java.util.Random();
 		int i = r.nextInt(100) + 1;
-		if(i <= 5) Str++;
-		else if(i > 5 && i <= 35) Int++;
-		else if(i > 35 && i <= 50) Spd++;
-		else if(i > 50 && i <= 65) Health++;
-		else if(i > 65 && i <= 95) Wis++;
-		else Dex++;
+		if(i <= 15) changeStr(1);
+		else if(i > 15 && i <= 20) changeInt(1);
+		else if(i > 20 && i <= 50) changeSpd(1);
+		else if(i > 50 && i <= 65) changeHealth(1);
+		else if(i > 65 && i <= 70) changeWis(1);
+		else changeDex(1);
 	}
+	
 	
 	/**
 	 * Level Up-Methode. 5 Stat Punkte und folgende Wahrscheinlichkeiten einen Stat um 1 zu erhoehen:
-	 * <li>Str und Dex -> 15%
-	 * <li>Int und Wisdom -> 50%
-	 * <li>Spd und Health -> 25%
+	 * <li>Str und Health -> 25%
+	 * <li>Int und Wisdom -> 15%
+	 * <li>Spd und Dex -> 50%
 	 * <li>Wenn kein Stat beim Level Up gestiegen -> zwei mal einen zufaelligen Stat mit levelUp1Stat() erhoehen.
 	 */
 	public void levelUp(){
@@ -34,18 +35,18 @@ public class StatsMage extends Stats{
 		StatPts+=5;
 		java.util.Random r = new java.util.Random();
 		int i = r.nextInt(100) + 1;
-		if(i <= 15) {Str++; check = true;}
+		if(i <= 25) {changeStr(1); check = true;}
 		i = r.nextInt(100) + 1;
-		if(i > 5 && i <= 55) {Int++; check = true;}
+		if(i > 5 && i <= 20) {changeInt(1); check = true;}
 		i = r.nextInt(100) + 1;
-		if(i > 25 && i <= 50) {Spd++; check = true;}
+		if(i > 10 && i <= 60) {changeSpd(1); check = true;}
 		i = r.nextInt(100) + 1;
-		if(i > 40 && i <= 65) {Health++; check = true;}
+		if(i > 40 && i <= 65) {changeHealth(1); check = true;}
 		i = r.nextInt(100) + 1;
-		if(i > 45 && i <= 95) {Wis++; check = true;}
+		if(i > 55 && i <= 70) {changeWis(1); check = true;}
 		i = r.nextInt(100) + 1;
-		if(i > 85) {Dex++; check = true;}
-		
+		if(i > 50) {changeDex(1); check = true;}
+
 		if(!check) {
 			levelUp1Stat();
 			levelUp1Stat();
@@ -53,13 +54,13 @@ public class StatsMage extends Stats{
 	}
 	
 	public static void main(String[] args) {
-		StatsMage test = new StatsMage();
-		System.out.println("Level 1 Mage");
+		StatsThief test = new StatsThief();
+		System.out.println("Level 1 thief");
 		test.printStats();
 		System.out.println("Nach 10 Level Up");
 		
 		for(int z = 0; z < 10; z++) {
-			test = new StatsMage();
+			test = new StatsThief();
 			for(int i = 0; i < 10; i++) test.levelUp();
 			test.printStats();
 		}

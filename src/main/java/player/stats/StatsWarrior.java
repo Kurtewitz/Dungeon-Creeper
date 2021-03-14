@@ -1,4 +1,4 @@
-package player;
+package player.stats;
 
 public class StatsWarrior extends Stats{
 	
@@ -15,12 +15,12 @@ public class StatsWarrior extends Stats{
 	public void levelUp1Stat(){
 		java.util.Random r = new java.util.Random();
 		int i = r.nextInt(100) + 1;
-		if(i <= 30) Str++;
-		else if(i > 30 && i <= 35) Int++;
-		else if(i > 35 && i <= 50) Spd++;
-		else if(i > 50 && i <= 80) Health++;
-		else if(i > 80 && i <= 85) Wis++;
-		else Dex++;
+		if(i <= 30) changeStr(1);
+		else if(i > 30 && i <= 35) changeInt(1);
+		else if(i > 35 && i <= 50) changeSpd(1);
+		else if(i > 50 && i <= 80) changeHealth(1);
+		else if(i > 80 && i <= 85) changeWis(1);
+		else changeDex(1);
 	}
 	
 	/**
@@ -35,17 +35,17 @@ public class StatsWarrior extends Stats{
 		StatPts+=3;
 		java.util.Random r = new java.util.Random();
 		int i = r.nextInt(100) + 1;
-		if(i <= 50) {Str++; check = true;}
+		if(i <= 50) {changeStr(1); check = true;}
 		i = r.nextInt(100) + 1;
-		if(i > 20 && i <= 35) {Int++; check = true;}
+		if(i > 20 && i <= 35) {changeInt(1); check = true;}
 		i = r.nextInt(100) + 1;
-		if(i > 25 && i <= 50) {Spd++; check = true;}
+		if(i > 25 && i <= 50) {changeSpd(1); check = true;}
 		i = r.nextInt(100) + 1;
-		if(i > 40 && i <= 90) {Health++; check = true;}
+		if(i > 40 && i <= 90) {changeHealth(1); check = true;}
 		i = r.nextInt(100) + 1;
-		if(i > 70 && i <= 85) {Wis++; check = true;}
+		if(i > 70 && i <= 85) {changeWis(1); check = true;}
 		i = r.nextInt(100) + 1;
-		if(i > 75) {Dex++; check = true;}
+		if(i > 75) {changeDex(1); check = true;}
 
 		if(!check) {
 			levelUp1Stat();

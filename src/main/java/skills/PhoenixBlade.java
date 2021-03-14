@@ -11,11 +11,11 @@ public class PhoenixBlade extends Skill{
 	@Override
 	public void use(Player target) {
 		target.loseHP(dmg());
-		System.out.println(target.HP()  + " / " + target.maxHP());
+		System.out.println(target.getCurrentHealth()  + " / " + target.getMaxHealth());
 	}
 	
 	public int dmg() {
-		return user.dmg() + user.inventory().equippedWeapon().dmg();
+		return user.dmg() + user.inventory().equippedWeapon().damage();
 	}
 	
 	public String toString() {
@@ -23,7 +23,7 @@ public class PhoenixBlade extends Skill{
 	}
 	
 	public String description() {
-		return "You invoke the power of the Phoenix doubling your weapon dmg for the next strike. Deals " + user.inventory().equippedWeapon().dmg() + " additional damage.";
+		return "You invoke the power of the Phoenix doubling your weapon dmg for the next strike. Deals " + user.inventory().equippedWeapon().damage() + " additional damage.";
 	}
 	
 	

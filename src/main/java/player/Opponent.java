@@ -1,10 +1,11 @@
 package player;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import items.*;
+import items.shields.Shield;
 import items.weapons.Weapon;
+import util.RNG;
 
 public class Opponent extends Player{
 
@@ -61,13 +62,12 @@ public class Opponent extends Player{
 	 * <li><code>3</code> if weapon + shield
 	 */
 	public ArrayList<Item> dropLoot() {
-		Random r = new Random();
-		int i = r.nextInt(100) + 1;
+		int i = RNG.randomPositiveInt(101);
 
 		boolean dropWeapon = i % 2 == 0;
 		boolean dropShield = i % 3 == 0;
 
-		ArrayList<Item> loot = new ArrayList<Item>();
+		ArrayList<Item> loot = new ArrayList<>();
 
 		if(dropWeapon && inventory.equippedWeapon() != null) {
 			loot.add(inventory.equippedWeapon());
@@ -92,7 +92,7 @@ public class Opponent extends Player{
 		// make sure the final dmg is at least 1.
 		int dmgDealt = Math.max(1, dmg() - p.def());
 		p.loseHP(dmgDealt);
-		System.out.println("Player HP: " + p.HP() + " / " + p.healthPointsMax);
+		System.out.println("Player HP: " + p.getCurrentHealth() + " / " + p.getMaxHealth());
 	}
 	
 	/**
