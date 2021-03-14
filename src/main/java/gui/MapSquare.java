@@ -190,7 +190,6 @@ public class MapSquare extends StackPane {
 	}
 	/** fade-out animation when you lose sight of a monster */
 	public void hideMonster() {
-		
 		if(monsterSpawned) {
 			FadeTransition anim = new FadeTransition(Duration.millis(600), monster);
 			anim.setFromValue(monster.getOpacity());
@@ -220,7 +219,6 @@ public class MapSquare extends StackPane {
 	}
 	
 	public void spawnTreasure() {
-		
 		if(checkTreasureSpawn()) {
 			FadeTransition anim = new FadeTransition(Duration.millis(600), special);
 			anim.setFromValue(special.getOpacity());
@@ -230,7 +228,6 @@ public class MapSquare extends StackPane {
 	}
 	
 	public void hideTreasure() {
-		
 		if(treasureSpawned) {
 			FadeTransition anim = new FadeTransition(Duration.millis(600), special);
 			anim.setFromValue(special.getOpacity());
@@ -238,10 +235,11 @@ public class MapSquare extends StackPane {
 			anim.play();
 		}
 	}
-	
-	
-	
-	
+
+	public void pickUpTreasure() {
+		hideTreasure();
+		treasureSpawned = false;
+	}
 	
 	public void setFitHeight(double d) {
 		mapTile.setFitHeight(d);

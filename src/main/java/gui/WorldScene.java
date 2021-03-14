@@ -264,7 +264,10 @@ public class WorldScene extends Scene {
 	public boolean foundTreasure(MapSquare destination) {
 		return destination.treasure();
 	}
-	
+
+	public void pickUpTreasureAt(int x, int y) {
+		squares[y][x].pickUpTreasure();
+	}
 	
 	public ParallelTransition moveNorth() {
 		
@@ -447,6 +450,10 @@ public class WorldScene extends Scene {
 			if(encounteredMonster(squares[y][x])) {
 				model.fightJudge().initFight(model.fightJudge().spawnMonster(x, y));
 				view.switchToFight(startingX, startingY);
+			}
+			if(foundTreasure(squares[y][x])) {
+				model.player().pickUpHealthPotions(5);
+				pickUpTreasureAt(x, y);
 			}
 		}
 		

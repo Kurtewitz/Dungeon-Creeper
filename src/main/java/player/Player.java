@@ -179,6 +179,10 @@ public class Player {
 		return healthPointsCurrent <= 0;
 	}
 
+    public void pickUpHealthPotions(int amountOfPotions) {
+		inventory.addHealthPotions(amountOfPotions);
+    }
+
 	
 /*	public static void main(String[] args) {
 		Player p = new Player(5,5,1);

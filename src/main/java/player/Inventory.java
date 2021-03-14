@@ -57,6 +57,10 @@ public class Inventory {
 		}
 		return false;
 	}
+
+	public void addHealthPotions(int amount) {
+		healthPotions.set(healthPotions.getValue() + amount);
+	}
 	
 	public Weapon equippedWeapon() {
 		return equipped.weapon();
