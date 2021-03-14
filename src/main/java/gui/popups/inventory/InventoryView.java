@@ -1,7 +1,6 @@
 package gui.popups.inventory;
 
 import gui.WorldScene;
-import gui.popups.inventory.InventoryItem;
 import javafx.geometry.Insets;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.Effect;
@@ -13,8 +12,8 @@ import player.Inventory;
 
 public class InventoryView extends FlowPane {
 
-    static final double ITEM_WIDTH = WorldScene.SINGLE_SQUARE_WIDTH * WorldScene.zoomFactor;
-    static final double ITEM_HEIGHT = WorldScene.SINGLE_SQUARE_HEIGHT * WorldScene.zoomFactor;
+    static final double ITEM_WIDTH = WorldScene.SINGLE_SQUARE_WIDTH * WorldScene.ZOOM_FACTOR;
+    static final double ITEM_HEIGHT = WorldScene.SINGLE_SQUARE_HEIGHT * WorldScene.ZOOM_FACTOR;
     static final int ITEMS_PER_ROW = 5;
 
     static final Background invBG = new Background(new BackgroundFill(Paint.valueOf("saddlebrown"), CornerRadii.EMPTY, Insets.EMPTY));

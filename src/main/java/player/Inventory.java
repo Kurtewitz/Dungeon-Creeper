@@ -10,6 +10,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Inventory {
 	
@@ -70,16 +71,16 @@ public class Inventory {
 		return equipped.shield();
 	}
 	
-	public ArrayList<Weapon> weapons() {
+	public List<Weapon> weapons() {
 		return weapons;
 	}
 	
-	public ArrayList<Shield> shields() {
+	public List<Shield> shields() {
 		return shields;
 	}
 	
-	public ArrayList<Item> items() {
-		ArrayList<Item> items = new ArrayList<>(weapons);
+	public List<Item> items() {
+		List<Item> items = new ArrayList<>(weapons);
 		items.addAll(shields);
 		return items;
 	}
@@ -250,10 +251,6 @@ public class Inventory {
 		i.equipWeapon(i.weapons().get(2));
 		i.printWeapons();
 		System.out.println(i.equippedWeapon());
-		//i.pickUpWeapon(new Keule(4, true));
-		//i.pickUpWeapon(new Keule(5, false));
-		//i.pickUpWeapon(new Schwert(7, true));
-		//i.printWeapons();
 
 	}
 }
